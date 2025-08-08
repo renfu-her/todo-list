@@ -254,15 +254,25 @@ $(document).ready(function() {
     // Load statistics
     async function loadStats() {
         try {
+            console.log('Loading stats...');
             const response = await api.getTodoStats();
+            console.log('Stats response:', response);
             if (response.success) {
                 const stats = response.data;
+                console.log('Stats data:', stats);
                 $('#total-tasks').text(stats.total);
                 $('#completed-tasks').text(stats.completed);
                 $('#pending-tasks').text(stats.pending);
                 $('#overdue-tasks').text(stats.overdue);
+                console.log('Stats updated in UI:', {
+                    total: stats.total,
+                    completed: stats.completed,
+                    pending: stats.pending,
+                    overdue: stats.overdue
+                });
             }
         } catch (error) {
+            console.error('Load stats error:', error);
             api.showError(error);
         }
     }
