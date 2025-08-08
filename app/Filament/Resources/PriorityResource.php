@@ -17,13 +17,33 @@ class PriorityResource extends Resource
 {
     protected static ?string $model = Priority::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
+
+    protected static ?string $navigationGroup = 'Task Management';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Section::make('Priority Information')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\ColorPicker::make('color')
+                            ->required()
+                            ->default('#EF4444'),
+                        Forms\Components\Select::make('level')
+                            ->options([
+                                1 => 'Low',
+                                2 => 'Medium',
+                                3 => 'High',
+                                4 => 'Urgent',
+                            ])
+                            ->required()
+                            ->default(1),
+                    ])
+                    ->columns(3),
             ]);
     }
 
@@ -31,25 +51,51 @@ class PriorityResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\ColorColumn::make('color')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('level')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('todos_count')
+                    ->counts('todos')
+                    ->sortable()
+                    ->label('Tasks'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('level')
+                    ->options([
+                        1 => 'Low',
+                        2 => 'Medium',
+                        3 => 'High',
+                        4 => 'Urgent',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('level', 'asc');
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\TodosRelationManager::class,
         ];
     }
 

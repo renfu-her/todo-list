@@ -17,13 +17,24 @@ class StatusResource extends Resource
 {
     protected static ?string $model = Status::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-signal';
+
+    protected static ?string $navigationGroup = 'Task Management';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Section::make('Status Information')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\ColorPicker::make('color')
+                            ->required()
+                            ->default('#6B7280'),
+                    ])
+                    ->columns(2),
             ]);
     }
 
@@ -31,13 +42,30 @@ class StatusResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\ColorColumn::make('color')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('todos_count')
+                    ->counts('todos')
+                    ->sortable()
+                    ->label('Tasks'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -49,7 +77,7 @@ class StatusResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\TodosRelationManager::class,
         ];
     }
 
