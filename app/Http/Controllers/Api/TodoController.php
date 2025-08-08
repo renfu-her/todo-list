@@ -232,24 +232,41 @@ class TodoController extends Controller
     {
         $user = $request->user();
         
+        // Get all todos for the user
+        $todos = Todo::with('status')
+            ->where(function ($q) use ($user) {
+                $q->where('created_by', $user->id)
+                  ->orWhere('assigned_to', $user->id);
+            })->get();
+        
         $stats = [
-            'total' => Todo::where('created_by', $user->id)
-                ->orWhere('assigned_to', $user->id)
-                ->count(),
-            'completed' => Todo::where(function ($q) use ($user) {
-                $q->where('created_by', $user->id)
-                  ->orWhere('assigned_to', $user->id);
-            })->where('is_completed', true)->count(),
-            'pending' => Todo::where(function ($q) use ($user) {
-                $q->where('created_by', $user->id)
-                  ->orWhere('assigned_to', $user->id);
-            })->where('is_completed', false)->count(),
-            'overdue' => Todo::where(function ($q) use ($user) {
-                $q->where('created_by', $user->id)
-                  ->orWhere('assigned_to', $user->id);
-            })->where('due_date', '<', now())
-              ->where('is_completed', false)->count(),
+            'total' => $todos->count(),
+            'completed' => 0,
+            'pending' => 0,
+            'overdue' => 0,
         ];
+        
+        foreach ($todos as $todo) {
+            // Determine status based on status relation or is_completed
+            $status = $todo->status ? $todo->status->name : ($todo->is_completed ? 'Completed' : 'Pending');
+            
+            switch (strtolower($status)) {
+                case 'completed':
+                    $stats['completed']++;
+                    break;
+                case 'pending':
+                case 'in progress':
+                case 'on hold':
+                case 'cancelled':
+                    $stats['pending']++;
+                    break;
+            }
+            
+            // Check for overdue (due date is past and not completed)
+            if ($todo->due_date && $todo->due_date < now() && strtolower($status) !== 'completed') {
+                $stats['overdue']++;
+            }
+        }
 
         return response()->json([
             'success' => true,
