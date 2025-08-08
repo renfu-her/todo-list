@@ -37,7 +37,11 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Create token for API authentication
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Also log in the user for session authentication
+        Auth::login($user);
 
         return response()->json([
             'success' => true,
@@ -76,7 +80,12 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
+        
+        // Create token for API authentication
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Regenerate session for security
+        $request->session()->regenerate();
 
         return response()->json([
             'success' => true,
@@ -107,7 +116,13 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
+        // Revoke the current token
         $request->user()->currentAccessToken()->delete();
+
+        // Also logout from session
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json([
             'success' => true,
