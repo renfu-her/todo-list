@@ -34,11 +34,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Todo routes
     Route::get('/todos', [TodoController::class, 'index']);
     Route::post('/todos', [TodoController::class, 'store']);
+    Route::get('/todos/stats', [TodoController::class, 'stats']);
     Route::get('/todos/{todo}', [TodoController::class, 'show']);
     Route::put('/todos/{todo}', [TodoController::class, 'update']);
     Route::delete('/todos/{todo}', [TodoController::class, 'destroy']);
     Route::patch('/todos/{todo}/toggle', [TodoController::class, 'toggleComplete']);
-    Route::get('/todos/stats', [TodoController::class, 'stats']);
     
     // Category routes
     Route::get('/categories', [CategoryController::class, 'index']);
