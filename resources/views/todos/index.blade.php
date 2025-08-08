@@ -388,13 +388,20 @@ $(document).ready(function() {
                 `;
             }
             
-            // Set info
-            const infoContainer = item.querySelector('.todo-info');
-            let infoHtml = '';
-            if (todo.due_date) {
-                const dueDate = new Date(todo.due_date);
-                infoHtml += `<div><i class="fas fa-calendar me-1"></i>${dueDate.toLocaleDateString()}</div>`;
-            }
+                         // Set info
+             const infoContainer = item.querySelector('.todo-info');
+             let infoHtml = '';
+             if (todo.due_date) {
+                 const dueDate = new Date(todo.due_date);
+                 // Format as YYYY-MM-DD HH:mm
+                 const year = dueDate.getFullYear();
+                 const month = String(dueDate.getMonth() + 1).padStart(2, '0');
+                 const day = String(dueDate.getDate()).padStart(2, '0');
+                 const hours = String(dueDate.getHours()).padStart(2, '0');
+                 const minutes = String(dueDate.getMinutes()).padStart(2, '0');
+                 const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+                 infoHtml += `<div><i class="fas fa-calendar me-1"></i>${formattedDateTime}</div>`;
+             }
             infoHtml += `<div><i class="fas fa-user me-1"></i>建立者: ${todo.creator.name}</div>`;
             if (todo.assignee) {
                 infoHtml += `<div><i class="fas fa-user-check me-1"></i>指派給: ${todo.assignee.name}</div>`;
