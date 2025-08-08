@@ -4,6 +4,18 @@
 
 @section('content')
 <div class="row">
+    <!-- Current Date Time Display -->
+    <div class="col-12 mb-3">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    <span id="current-datetime">載入中...</span>
+                </h5>
+            </div>
+        </div>
+    </div>
+    
     <!-- Statistics Cards -->
     <div class="col-12 mb-4">
         <div class="row" id="stats-container">
@@ -196,9 +208,31 @@ $(document).ready(function() {
     console.log('Token found:', api.token ? 'Yes' : 'No');
 
     // Load initial data
+    updateCurrentDateTime();
     loadStats();
     loadFilters();
     loadTodos();
+    
+    // Update current date time every second
+    setInterval(updateCurrentDateTime, 1000);
+
+    // Update current date time function
+    function updateCurrentDateTime() {
+        const now = new Date();
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Taipei'
+        };
+        
+        const formattedDateTime = now.toLocaleString('zh-TW', options);
+        $('#current-datetime').text(formattedDateTime);
+    }
 
     // Filter form submission
     $('#filter-form').on('submit', function(e) {
