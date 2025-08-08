@@ -29,6 +29,22 @@ class Todo extends Model
     ];
 
     /**
+     * Get the due date in local timezone for API responses.
+     */
+    public function getDueDateLocalAttribute()
+    {
+        return $this->due_date ? $this->due_date->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * Prepare the model for serialization.
+     */
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Get the category that owns the todo.
      */
     public function category(): BelongsTo
