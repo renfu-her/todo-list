@@ -45,7 +45,7 @@ A comprehensive task management application built with Laravel 12, featuring a m
 - **Backend**: Laravel 12
 - **Admin Panel**: Filament 3
 - **Frontend**: Blade templates, Bootstrap 5, jQuery, FontAwesome 6
-- **Database**: SQLite (default), supports MySQL/PostgreSQL
+- **Database**: MySQL (configured by default)
 - **API**: RESTful API with Laravel Sanctum
 - **Authentication**: Laravel's built-in authentication
 - **Styling**: Bootstrap 5 with custom CSS
@@ -62,6 +62,25 @@ Before running this project, make sure you have the following installed:
 
 ## 🚀 Installation & Setup
 
+### Option 1: Automated Setup (Recommended)
+
+#### For Linux/Mac:
+```bash
+git clone <repository-url>
+cd todo
+chmod +x setup.sh
+./setup.sh
+```
+
+#### For Windows:
+```bash
+git clone <repository-url>
+cd todo
+setup.bat
+```
+
+### Option 2: Manual Setup
+
 ### 1. Clone the Repository
 
 ```bash
@@ -73,7 +92,6 @@ cd todo
 
 ```bash
 composer install
-npm install
 ```
 
 ### 3. Environment Configuration
@@ -83,18 +101,22 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Edit the `.env` file and configure your database settings:
+The application is configured to use MySQL by default. You'll need to configure your database settings in the `.env` file:
 
 ```env
-DB_CONNECTION=sqlite
-DB_DATABASE=/absolute/path/to/your/project/database/database.sqlite
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=todo_app
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
 ```
 
 ### 4. Create Database
 
 ```bash
-# Create SQLite database file
-touch database/database.sqlite
+# Create MySQL database
+mysql -u root -p -e "CREATE DATABASE todo_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Run migrations
 php artisan migrate
@@ -139,7 +161,7 @@ php artisan vendor:publish --tag="filament-forms-tinyeditor-config"
 # Create storage link
 php artisan storage:link
 
-# Set proper permissions
+# Set proper permissions (Linux/Mac only)
 chmod -R 775 storage bootstrap/cache
 ```
 
@@ -150,6 +172,8 @@ php artisan serve
 ```
 
 The application will be available at `http://localhost:8000`
+
+**Note**: The automated setup scripts will handle all these steps for you, including database configuration, package installation, and admin user creation.
 
 ## 📱 Usage
 
@@ -222,10 +246,31 @@ APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8000
 
+# Database Configuration (SQLite by default)
 DB_CONNECTION=sqlite
-DB_DATABASE=/path/to/database.sqlite
+DB_DATABASE=/absolute/path/to/your/project/database/database.sqlite
 
 FILAMENT_PATH=admin
+```
+
+**Note**: The setup scripts automatically configure SQLite. To use MySQL or PostgreSQL instead, update the database configuration in `.env`:
+
+```env
+# For MySQL
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=todo_app
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+
+# For PostgreSQL
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=todo_app
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
 ```
 
 ### Customization
@@ -306,9 +351,11 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 ### Server Requirements
 
 - PHP 8.2+
-- MySQL 5.7+ or PostgreSQL 10+
+- SQLite 3 (included with PHP)
 - Web server (Apache/Nginx)
 - SSL certificate (recommended)
+
+**Note**: This application is configured to use SQLite by default, which requires no additional database server setup. For production deployments, you can switch to MySQL or PostgreSQL by updating the database configuration in `.env`.
 
 ## 🤝 Contributing
 
@@ -343,8 +390,18 @@ For support and questions:
 
 ## 🎯 Quick Start Commands
 
+### Using Automated Setup (Recommended)
 ```bash
 # Complete setup in one go
+git clone <repository-url> && cd todo
+./setup.sh  # Linux/Mac
+# OR
+setup.bat   # Windows
+```
+
+### Manual Setup
+```bash
+# Complete manual setup
 git clone <repository-url> && cd todo
 composer install
 cp .env.example .env

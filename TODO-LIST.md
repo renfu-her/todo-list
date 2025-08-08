@@ -7,7 +7,7 @@ Building a comprehensive ToDo List application using Laravel 12 with Filament ad
 - **Backend**: Laravel 12
 - **Admin Panel**: Filament
 - **Frontend**: Blade templates with Bootstrap 5, jQuery, FontAwesome 6
-- **Database**: SQLite (initial setup)
+- **Database**: MySQL (initial setup)
 - **API**: RESTful API endpoints
 
 ## Development Progress
