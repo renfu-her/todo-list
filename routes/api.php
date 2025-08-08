@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\TodoController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\PriorityController;
+use App\Http\Controllers\Api\StatusController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CommentController;
 
 /*
@@ -34,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/todos/{todo}', [TodoController::class, 'show']);
     Route::put('/todos/{todo}', [TodoController::class, 'update']);
     Route::delete('/todos/{todo}', [TodoController::class, 'destroy']);
+    Route::patch('/todos/{todo}/toggle', [TodoController::class, 'toggleComplete']);
     Route::get('/todos/stats', [TodoController::class, 'stats']);
     
     // Category routes
@@ -42,6 +46,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/categories/{category}', [CategoryController::class, 'show']);
     Route::put('/categories/{category}', [CategoryController::class, 'update']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+    
+    // Priority routes
+    Route::get('/priorities', [PriorityController::class, 'index']);
+    Route::post('/priorities', [PriorityController::class, 'store']);
+    Route::get('/priorities/{priority}', [PriorityController::class, 'show']);
+    Route::put('/priorities/{priority}', [PriorityController::class, 'update']);
+    Route::delete('/priorities/{priority}', [PriorityController::class, 'destroy']);
+    
+    // Status routes
+    Route::get('/statuses', [StatusController::class, 'index']);
+    Route::post('/statuses', [StatusController::class, 'store']);
+    Route::get('/statuses/{status}', [StatusController::class, 'show']);
+    Route::put('/statuses/{status}', [StatusController::class, 'update']);
+    Route::delete('/statuses/{status}', [StatusController::class, 'destroy']);
+    
+    // User routes
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
     
     // Comment routes
     Route::get('/todos/{todo}/comments', [CommentController::class, 'index']);

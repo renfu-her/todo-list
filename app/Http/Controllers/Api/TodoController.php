@@ -200,6 +200,32 @@ class TodoController extends Controller
     }
 
     /**
+     * Toggle completion status of a todo.
+     */
+    public function toggleComplete(Request $request, Todo $todo): JsonResponse
+    {
+        $user = $request->user();
+        
+        // Check if user has access to this todo
+        if ($todo->created_by !== $user->id && $todo->assigned_to !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access',
+            ], 403);
+        }
+
+        $todo->update([
+            'is_completed' => !$todo->is_completed,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Todo completion status updated successfully',
+            'is_completed' => $todo->is_completed,
+        ]);
+    }
+
+    /**
      * Get user's todo statistics.
      */
     public function stats(Request $request): JsonResponse

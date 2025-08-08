@@ -17,73 +17,9 @@ class TodoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $user = Auth::user();
-        
-        $query = Todo::with(['category', 'priority', 'status', 'creator', 'assignee'])
-            ->where(function ($q) use ($user) {
-                $q->where('created_by', $user->id)
-                  ->orWhere('assigned_to', $user->id);
-            });
-
-        // Apply filters
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        if ($request->filled('priority_id')) {
-            $query->where('priority_id', $request->priority_id);
-        }
-
-        if ($request->filled('status_id')) {
-            $query->where('status_id', $request->status_id);
-        }
-
-        if ($request->filled('is_completed')) {
-            $query->where('is_completed', $request->boolean('is_completed'));
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-
-        // Apply sorting
-        $sortBy = $request->get('sort_by', 'created_at');
-        $sortOrder = $request->get('sort_order', 'desc');
-        $query->orderBy($sortBy, $sortOrder);
-
-        $todos = $query->paginate(15);
-        $categories = Category::all();
-        $priorities = Priority::all();
-        $statuses = Status::all();
-        $users = User::all();
-
-        // Get statistics
-        $stats = [
-            'total' => Todo::where('created_by', $user->id)
-                ->orWhere('assigned_to', $user->id)
-                ->count(),
-            'completed' => Todo::where(function ($q) use ($user) {
-                $q->where('created_by', $user->id)
-                  ->orWhere('assigned_to', $user->id);
-            })->where('is_completed', true)->count(),
-            'pending' => Todo::where(function ($q) use ($user) {
-                $q->where('created_by', $user->id)
-                  ->orWhere('assigned_to', $user->id);
-            })->where('is_completed', false)->count(),
-            'overdue' => Todo::where(function ($q) use ($user) {
-                $q->where('created_by', $user->id)
-                  ->orWhere('assigned_to', $user->id);
-            })->where('due_date', '<', now())
-              ->where('is_completed', false)->count(),
-        ];
-
-        return view('todos.index', compact('todos', 'categories', 'priorities', 'statuses', 'users', 'stats'));
+        return view('todos.index');
     }
 
     /**
@@ -91,12 +27,7 @@ class TodoController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $priorities = Priority::all();
-        $statuses = Status::all();
-        $users = User::all();
-
-        return view('todos.create', compact('categories', 'priorities', 'statuses', 'users'));
+        return view('todos.create');
     }
 
     /**
@@ -162,12 +93,7 @@ class TodoController extends Controller
             abort(403, 'Unauthorized access');
         }
 
-        $categories = Category::all();
-        $priorities = Priority::all();
-        $statuses = Status::all();
-        $users = User::all();
-
-        return view('todos.edit', compact('todo', 'categories', 'priorities', 'statuses', 'users'));
+        return view('todos.edit', compact('todo'));
     }
 
     /**

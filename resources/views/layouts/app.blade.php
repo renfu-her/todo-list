@@ -246,6 +246,10 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <!-- API Utility -->
+    <script src="{{ asset('js/api.js') }}"></script>
     
     <script>
         // CSRF token setup for AJAX requests

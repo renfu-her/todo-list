@@ -12,7 +12,7 @@
                 </h4>
             </div>
             <div class="card-body p-4">
-                <form method="POST" action="{{ route('todos.store') }}">
+                <form id="create-todo-form">
                     @csrf
                     
                     <div class="row">
@@ -22,22 +22,18 @@
                                 <label for="title" class="form-label">
                                     <i class="fas fa-tasks me-1"></i>任務標題 <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" 
-                                       id="title" name="title" value="{{ old('title') }}" required>
-                                @error('title')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <input type="text" class="form-control" 
+                                       id="title" name="title" required>
+                                <div class="invalid-feedback" id="title-error"></div>
                             </div>
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">
                                     <i class="fas fa-align-left me-1"></i>任務描述
                                 </label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" 
-                                          id="description" name="description" rows="4">{{ old('description') }}</textarea>
-                                @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <textarea class="form-control" 
+                                          id="description" name="description" rows="4"></textarea>
+                                <div class="invalid-feedback" id="description-error"></div>
                             </div>
 
                             <div class="row">
@@ -46,19 +42,10 @@
                                         <label for="category_id" class="form-label">
                                             <i class="fas fa-tag me-1"></i>分類
                                         </label>
-                                        <select class="form-select @error('category_id') is-invalid @enderror" 
-                                                id="category_id" name="category_id">
+                                        <select class="form-select" id="category_id" name="category_id">
                                             <option value="">選擇分類</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}" 
-                                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name }}
-                                                </option>
-                                            @endforeach
                                         </select>
-                                        @error('category_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <div class="invalid-feedback" id="category_id-error"></div>
                                     </div>
                                 </div>
                                 
@@ -67,19 +54,10 @@
                                         <label for="priority_id" class="form-label">
                                             <i class="fas fa-exclamation-triangle me-1"></i>優先級
                                         </label>
-                                        <select class="form-select @error('priority_id') is-invalid @enderror" 
-                                                id="priority_id" name="priority_id">
+                                        <select class="form-select" id="priority_id" name="priority_id">
                                             <option value="">選擇優先級</option>
-                                            @foreach($priorities as $priority)
-                                                <option value="{{ $priority->id }}" 
-                                                    {{ old('priority_id') == $priority->id ? 'selected' : '' }}>
-                                                    {{ $priority->name }}
-                                                </option>
-                                            @endforeach
                                         </select>
-                                        @error('priority_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <div class="invalid-feedback" id="priority_id-error"></div>
                                     </div>
                                 </div>
                             </div>
@@ -90,19 +68,10 @@
                                         <label for="status_id" class="form-label">
                                             <i class="fas fa-signal me-1"></i>狀態
                                         </label>
-                                        <select class="form-select @error('status_id') is-invalid @enderror" 
-                                                id="status_id" name="status_id">
+                                        <select class="form-select" id="status_id" name="status_id">
                                             <option value="">選擇狀態</option>
-                                            @foreach($statuses as $status)
-                                                <option value="{{ $status->id }}" 
-                                                    {{ old('status_id') == $status->id ? 'selected' : '' }}>
-                                                    {{ $status->name }}
-                                                </option>
-                                            @endforeach
                                         </select>
-                                        @error('status_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <div class="invalid-feedback" id="status_id-error"></div>
                                     </div>
                                 </div>
                                 
@@ -111,11 +80,9 @@
                                         <label for="due_date" class="form-label">
                                             <i class="fas fa-calendar me-1"></i>截止日期
                                         </label>
-                                        <input type="datetime-local" class="form-control @error('due_date') is-invalid @enderror" 
-                                               id="due_date" name="due_date" value="{{ old('due_date') }}">
-                                        @error('due_date')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <input type="datetime-local" class="form-control" 
+                                               id="due_date" name="due_date">
+                                        <div class="invalid-feedback" id="due_date-error"></div>
                                     </div>
                                 </div>
                             </div>
@@ -134,25 +101,16 @@
                                         <label for="assigned_to" class="form-label">
                                             <i class="fas fa-user-check me-1"></i>指派給
                                         </label>
-                                        <select class="form-select @error('assigned_to') is-invalid @enderror" 
-                                                id="assigned_to" name="assigned_to">
+                                        <select class="form-select" id="assigned_to" name="assigned_to">
                                             <option value="">選擇用戶</option>
-                                            @foreach($users as $user)
-                                                <option value="{{ $user->id }}" 
-                                                    {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
-                                                    {{ $user->name }}
-                                                </option>
-                                            @endforeach
                                         </select>
-                                        @error('assigned_to')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <div class="invalid-feedback" id="assigned_to-error"></div>
                                     </div>
 
                                     <div class="mb-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="is_completed" 
-                                                   name="is_completed" value="1" {{ old('is_completed') ? 'checked' : '' }}>
+                                                   name="is_completed" value="1">
                                             <label class="form-check-label" for="is_completed">
                                                 <i class="fas fa-check-circle me-1"></i>標記為已完成
                                             </label>
@@ -190,7 +148,7 @@
                             <button type="reset" class="btn btn-outline-secondary me-2">
                                 <i class="fas fa-undo me-1"></i>重置
                             </button>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
                                 <i class="fas fa-save me-1"></i>建立任務
                             </button>
                         </div>
@@ -205,6 +163,9 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Load form data
+    loadFormData();
+
     // Auto-fill current date and time for due_date if empty
     if (!$('#due_date').val()) {
         const now = new Date();
@@ -221,8 +182,64 @@ $(document).ready(function() {
     $('#title').on('input', function() {
         if ($(this).val().length > 0) {
             $(this).removeClass('is-invalid').addClass('is-valid');
+            $('#title-error').hide();
         } else {
             $(this).removeClass('is-valid').addClass('is-invalid');
+        }
+    });
+
+    // Form submission
+    $('#create-todo-form').on('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = $('#submit-btn');
+        const originalText = submitBtn.html();
+        
+        // Disable submit button and show loading
+        submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>建立中...');
+        
+        // Clear previous errors
+        $('.is-invalid').removeClass('is-invalid');
+        $('.invalid-feedback').hide();
+        
+        try {
+            // Collect form data
+            const formData = new FormData(this);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (key === 'is_completed') {
+                    data[key] = value === '1';
+                } else if (value) {
+                    data[key] = value;
+                }
+            }
+            
+            // Create todo via API
+            const response = await api.createTodo(data);
+            
+            if (response.success) {
+                api.showSuccess('任務建立成功！');
+                setTimeout(() => {
+                    window.location.href = '{{ route("todos.index") }}';
+                }, 1500);
+            }
+        } catch (error) {
+            if (error.type === 'validation') {
+                // Show validation errors
+                Object.keys(error.errors).forEach(field => {
+                    const input = $(`#${field}`);
+                    const errorDiv = $(`#${field}-error`);
+                    
+                    input.addClass('is-invalid');
+                    errorDiv.text(error.errors[field][0]).show();
+                });
+            } else {
+                api.showError(error);
+            }
+        } finally {
+            // Re-enable submit button
+            submitBtn.prop('disabled', false).html(originalText);
         }
     });
 
@@ -235,6 +252,44 @@ $(document).ready(function() {
             console.log('Auto-saving draft...');
         }, 2000);
     });
+
+    // Load form data (categories, priorities, statuses, users)
+    async function loadFormData() {
+        try {
+            const [categoriesRes, prioritiesRes, statusesRes, usersRes] = await Promise.all([
+                api.getCategories(),
+                api.getPriorities(),
+                api.getStatuses(),
+                api.getUsers()
+            ]);
+
+            // Populate categories
+            const categorySelect = $('#category_id');
+            categoriesRes.data.forEach(category => {
+                categorySelect.append(`<option value="${category.id}">${category.name}</option>`);
+            });
+
+            // Populate priorities
+            const prioritySelect = $('#priority_id');
+            prioritiesRes.data.forEach(priority => {
+                prioritySelect.append(`<option value="${priority.id}">${priority.name}</option>`);
+            });
+
+            // Populate statuses
+            const statusSelect = $('#status_id');
+            statusesRes.data.forEach(status => {
+                statusSelect.append(`<option value="${status.id}">${status.name}</option>`);
+            });
+
+            // Populate users
+            const userSelect = $('#assigned_to');
+            usersRes.data.forEach(user => {
+                userSelect.append(`<option value="${user.id}">${user.name}</option>`);
+            });
+        } catch (error) {
+            api.showError(error);
+        }
+    }
 });
 </script>
 @endpush

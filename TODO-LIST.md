@@ -47,12 +47,12 @@ Building a comprehensive ToDo List application using Laravel 12 with Filament ad
 
 ### ✅ Phase 5: Frontend Development (COMPLETED)
 1. ✅ Home page with hero section and features showcase
-2. ✅ Authentication views (login/register)
-3. ✅ Todo list view with filtering and AJAX functionality
+2. ✅ Authentication views (login/register) - API-first approach
+3. ✅ Todo list view with filtering and AJAX functionality - API-first approach
 4. ✅ Enhanced layout with header and footer
-5. ✅ Todo detail view with comments system
-6. ✅ Todo creation/editing forms
-7. ✅ User dashboard and task management
+5. ✅ Todo detail view with comments system - API-first approach
+6. ✅ Todo creation/editing forms - API-first approach
+7. ✅ User dashboard and task management - API-first approach
 
 ### ⏳ Phase 6: Integration & Testing
 1. ⏳ Frontend-backend integration
