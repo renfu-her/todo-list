@@ -260,6 +260,22 @@ $(document).ready(function() {
             if (response.success) {
                 const stats = response.data;
                 console.log('Stats data:', stats);
+                
+                // Debug: Check current time and timezone
+                const now = new Date();
+                console.log('Current time (local):', now.toString());
+                console.log('Current time (ISO):', now.toISOString());
+                console.log('Current time (Asia/Taipei):', now.toLocaleString('zh-TW', {
+                    timeZone: 'Asia/Taipei',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                }));
+                
                 $('#total-tasks').text(stats.total);
                 $('#completed-tasks').text(stats.completed);
                 $('#pending-tasks').text(stats.pending);
