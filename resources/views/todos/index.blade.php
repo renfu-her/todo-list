@@ -392,13 +392,17 @@ $(document).ready(function() {
              const infoContainer = item.querySelector('.todo-info');
              let infoHtml = '';
              if (todo.due_date) {
-                 const dueDate = new Date(todo.due_date);
+                 // Parse the date string and treat it as local time (Asia/Taipei)
+                 const dueDate = new Date(todo.due_date + 'Z'); // Add Z to treat as UTC
+                 // Convert to local timezone (Asia/Taipei)
+                 const localDueDate = new Date(dueDate.getTime() + (8 * 60 * 60 * 1000)); // Add 8 hours for Asia/Taipei
+                 
                  // Format as YYYY-MM-DD HH:mm
-                 const year = dueDate.getFullYear();
-                 const month = String(dueDate.getMonth() + 1).padStart(2, '0');
-                 const day = String(dueDate.getDate()).padStart(2, '0');
-                 const hours = String(dueDate.getHours()).padStart(2, '0');
-                 const minutes = String(dueDate.getMinutes()).padStart(2, '0');
+                 const year = localDueDate.getFullYear();
+                 const month = String(localDueDate.getMonth() + 1).padStart(2, '0');
+                 const day = String(localDueDate.getDate()).padStart(2, '0');
+                 const hours = String(localDueDate.getHours()).padStart(2, '0');
+                 const minutes = String(localDueDate.getMinutes()).padStart(2, '0');
                  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
                  infoHtml += `<div><i class="fas fa-calendar me-1"></i>${formattedDateTime}</div>`;
              }
