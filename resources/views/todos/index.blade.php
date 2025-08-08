@@ -361,10 +361,29 @@ $(document).ready(function() {
                     </span>
                 `;
             }
-            if (todo.status) {
+            console.log('Todo status debug:', {
+                id: todo.id,
+                is_completed: todo.is_completed,
+                status: todo.status,
+                statusExists: !!todo.status
+            });
+            
+            if (todo.status && todo.status.name) {
                 badgesContainer.innerHTML += `
                     <span class="badge status-badge" style="background-color: ${todo.status.color}">
                         <i class="fas fa-signal me-1"></i>${todo.status.name}
+                    </span>
+                `;
+            } else {
+                // Show completion status if no status is set
+                // Convert to boolean if it's a string
+                const isCompleted = todo.is_completed === true || todo.is_completed === 'true' || todo.is_completed === 1;
+                const completionStatus = isCompleted ? 'Completed' : 'Pending';
+                const completionColor = isCompleted ? '#10B981' : '#6B7280';
+                const completionIcon = isCompleted ? 'fa-check-circle' : 'fa-clock';
+                badgesContainer.innerHTML += `
+                    <span class="badge status-badge" style="background-color: ${completionColor}">
+                        <i class="fas ${completionIcon} me-1"></i>${completionStatus}
                     </span>
                 `;
             }
