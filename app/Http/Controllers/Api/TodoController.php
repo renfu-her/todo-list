@@ -55,14 +55,6 @@ class TodoController extends Controller
 
         $todos = $query->paginate($request->get('per_page', 15));
 
-        // Convert dates to local timezone format
-        $todos->getCollection()->transform(function ($todo) {
-            if ($todo->due_date) {
-                $todo->due_date = $todo->due_date->format('Y-m-d H:i:s');
-            }
-            return $todo;
-        });
-
         return response()->json([
             'success' => true,
             'data' => $todos,
