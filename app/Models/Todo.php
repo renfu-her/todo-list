@@ -113,7 +113,7 @@ class Todo extends Model
      */
     public function scopeOverdue($query)
     {
-        return $query->where('due_date', '<', now()->setTimezone('Asia/Taipei'))->where('is_completed', false);
+        return $query->where('due_date', '<', now())->where('is_completed', false);
     }
 
     /**
@@ -121,6 +121,6 @@ class Todo extends Model
      */
     public function scopeDueToday($query)
     {
-        return $query->whereDate('due_date', today()->setTimezone('Asia/Taipei'))->where('is_completed', false);
+        return $query->whereDate('due_date', today())->where('is_completed', false);
     }
 }
