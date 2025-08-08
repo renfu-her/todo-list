@@ -263,7 +263,10 @@ class TodoController extends Controller
             }
             
             // Check for overdue (due date is past and not completed)
-            if ($todo->due_date && $todo->due_date < now() && !$todo->is_completed) {
+            // Use Asia/Taipei timezone for comparison
+            // Only consider is_completed field, not status
+            $now = now()->setTimezone('Asia/Taipei');
+            if ($todo->due_date && $todo->due_date->setTimezone('Asia/Taipei') < $now && !$todo->is_completed) {
                 $stats['overdue']++;
             }
         }

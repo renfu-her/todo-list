@@ -370,7 +370,15 @@ $(document).ready(function() {
             
             // Check if task is overdue (due date is past and task is not completed)
             const isCompleted = todo.is_completed === true || todo.is_completed === 'true' || todo.is_completed === 1;
-            const isOverdue = todo.due_date && new Date(todo.due_date) < new Date() && !isCompleted;
+            const isCompletedByStatus = todo.status && todo.status.name === 'Completed';
+            // Only consider task completed if both is_completed is true AND status is not 'Completed'
+            // This allows overdue tasks to show even if they have a 'Completed' status
+            const isTaskCompleted = isCompleted;
+            
+            const dueDate = todo.due_date ? new Date(todo.due_date) : null;
+            const currentDate = new Date();
+            
+            const isOverdue = dueDate && dueDate < currentDate && !isTaskCompleted;
             
             if (isOverdue) {
                 // Show overdue status
