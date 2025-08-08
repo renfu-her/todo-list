@@ -368,10 +368,9 @@ $(document).ready(function() {
                 statusExists: !!todo.status
             });
             
-            // Check if task is overdue
-            const isOverdue = todo.due_date && new Date(todo.due_date) < new Date() && 
-                             (!todo.status || todo.status.name !== 'Completed') && 
-                             (!todo.is_completed || todo.is_completed === false);
+            // Check if task is overdue (due date is past and task is not completed)
+            const isCompleted = todo.is_completed === true || todo.is_completed === 'true' || todo.is_completed === 1;
+            const isOverdue = todo.due_date && new Date(todo.due_date) < new Date() && !isCompleted;
             
             if (isOverdue) {
                 // Show overdue status
@@ -388,8 +387,6 @@ $(document).ready(function() {
                 `;
             } else {
                 // Show completion status if no status is set
-                // Convert to boolean if it's a string
-                const isCompleted = todo.is_completed === true || todo.is_completed === 'true' || todo.is_completed === 1;
                 const completionStatus = isCompleted ? 'Completed' : 'Pending';
                 const completionColor = isCompleted ? '#10B981' : '#6B7280';
                 const completionIcon = isCompleted ? 'fa-check-circle' : 'fa-clock';

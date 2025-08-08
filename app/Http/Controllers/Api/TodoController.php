@@ -263,7 +263,7 @@ class TodoController extends Controller
             }
             
             // Check for overdue (due date is past and not completed)
-            if ($todo->due_date && $todo->due_date < now() && strtolower($status) !== 'completed') {
+            if ($todo->due_date && $todo->due_date < now() && !$todo->is_completed) {
                 $stats['overdue']++;
             }
         }
