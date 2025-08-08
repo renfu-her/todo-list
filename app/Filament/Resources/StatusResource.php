@@ -18,7 +18,7 @@ class StatusResource extends Resource
     protected static ?string $model = Status::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-signal';
-    protected static ?string $navigationGroup = 'Task Management';
+    protected static ?string $navigationGroup = 'Todo 列表';
     protected static ?string $navigationLabel = '狀態管理';
     protected static ?string $modelLabel = '狀態';
     protected static ?string $pluralModelLabel = '狀態';
@@ -28,12 +28,14 @@ class StatusResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Status Information')
+                Forms\Components\Section::make('狀態資訊')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label('名稱')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\ColorPicker::make('color')
+                            ->label('顏色')
                             ->required()
                             ->default('#6B7280'),
                     ])
@@ -46,19 +48,23 @@ class StatusResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('名稱')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\ColorColumn::make('color')
+                    ->label('顏色')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('todos_count')
                     ->counts('todos')
                     ->sortable()
-                    ->label('Tasks'),
+                    ->label('任務數量'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('建立時間')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('更新時間')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -67,12 +73,12 @@ class StatusResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->label('編輯'),
+                Tables\Actions\DeleteAction::make()->label('刪除'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->label('批次刪除'),
                 ]),
             ]);
     }

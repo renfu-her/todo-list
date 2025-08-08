@@ -18,7 +18,7 @@ class CommentResource extends Resource
     protected static ?string $model = Comment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
-    protected static ?string $navigationGroup = 'Task Management';
+    protected static ?string $navigationGroup = 'Todo 列表';
     protected static ?string $navigationLabel = '評論管理';
     protected static ?string $modelLabel = '評論';
     protected static ?string $pluralModelLabel = '評論';
@@ -28,21 +28,22 @@ class CommentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Comment Information')
+                Forms\Components\Section::make('評論資訊')
                     ->schema([
                         Forms\Components\Select::make('todo_id')
                             ->relationship('todo', 'title')
                             ->searchable()
                             ->preload()
                             ->required()
-                            ->label('Task'),
+                            ->label('任務'),
                         Forms\Components\Select::make('user_id')
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
                             ->required()
-                            ->label('User'),
+                            ->label('用戶'),
                         Forms\Components\Textarea::make('content')
+                            ->label('內容')
                             ->required()
                             ->maxLength(65535)
                             ->columnSpanFull(),
@@ -59,36 +60,40 @@ class CommentResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->limit(50)
-                    ->label('Task'),
+                    ->label('任務'),
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
                     ->sortable()
-                    ->label('User'),
+                    ->label('用戶'),
                 Tables\Columns\TextColumn::make('content')
                     ->limit(100)
+                    ->label('內容')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
+                    ->label('建立時間')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
+                    ->label('更新時間')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('todo')
                     ->relationship('todo', 'title')
-                    ->label('Task'),
+                    ->label('任務'),
                 Tables\Filters\SelectFilter::make('user')
-                    ->relationship('user', 'name'),
+                    ->relationship('user', 'name')
+                    ->label('用戶'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->label('編輯'),
+                Tables\Actions\DeleteAction::make()->label('刪除'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->label('批次刪除'),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

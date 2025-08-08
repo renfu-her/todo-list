@@ -19,7 +19,7 @@ class TodoResource extends Resource
     protected static ?string $model = Todo::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
-    protected static ?string $navigationGroup = 'Task Management';
+    protected static ?string $navigationGroup = 'Todo 列表';
     protected static ?string $navigationLabel = '任務管理';
     protected static ?string $modelLabel = '任務';
     protected static ?string $pluralModelLabel = '任務';
@@ -29,16 +29,18 @@ class TodoResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Task Information')
+                Forms\Components\Section::make('任務資訊')
                     ->schema([
                         Forms\Components\TextInput::make('title')
+                            ->label('標題')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\Textarea::make('description')
+                            ->label('描述')
                             ->maxLength(65535)
                             ->columnSpanFull(),
                         Flatpickr::make('due_date')
-                            ->label('Due Date')
+                            ->label('截止時間')
                             ->dateFormat('Y-m-d H:i')
                             ->allowInput()
                             ->altInput(true)
@@ -49,41 +51,41 @@ class TodoResource extends Resource
                     ])
                     ->columns(2),
                 
-                Forms\Components\Section::make('Task Details')
+                Forms\Components\Section::make('任務細節')
                     ->schema([
                         Forms\Components\Select::make('category_id')
                             ->relationship('category', 'name')
                             ->searchable()
                             ->preload()
-                            ->label('Category'),
+                            ->label('分類'),
                         Forms\Components\Select::make('priority_id')
                             ->relationship('priority', 'name')
                             ->searchable()
                             ->preload()
-                            ->label('Priority'),
+                            ->label('優先級'),
                         Forms\Components\Select::make('status_id')
                             ->relationship('status', 'name')
                             ->searchable()
                             ->preload()
-                            ->label('Status'),
+                            ->label('狀態'),
                         Forms\Components\Toggle::make('is_completed')
-                            ->label('Completed'),
+                            ->label('已完成'),
                     ])
                     ->columns(2),
                 
-                Forms\Components\Section::make('Assignment')
+                Forms\Components\Section::make('指派資訊')
                     ->schema([
                         Forms\Components\Select::make('created_by')
                             ->relationship('creator', 'name')
                             ->searchable()
                             ->preload()
                             ->required()
-                            ->label('Created By'),
+                            ->label('建立者'),
                         Forms\Components\Select::make('assigned_to')
                             ->relationship('assignee', 'name')
                             ->searchable()
                             ->preload()
-                            ->label('Assigned To'),
+                            ->label('指派給'),
                     ])
                     ->columns(2),
             ]);
@@ -94,10 +96,12 @@ class TodoResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
+                    ->label('標題')
                     ->searchable()
                     ->sortable()
                     ->limit(50),
                 Tables\Columns\TextColumn::make('category.name')
+                    ->label('分類')
                     ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -108,6 +112,7 @@ class TodoResource extends Resource
                         default => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('priority.name')
+                    ->label('優先級')
                     ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -118,6 +123,7 @@ class TodoResource extends Resource
                         default => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('status.name')
+                    ->label('狀態')
                     ->sortable()
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -130,45 +136,53 @@ class TodoResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('creator.name')
                     ->sortable()
-                    ->label('Created By'),
+                    ->label('建立者'),
                 Tables\Columns\TextColumn::make('assignee.name')
                     ->sortable()
-                    ->label('Assigned To'),
+                    ->label('指派給'),
                 Tables\Columns\TextColumn::make('due_date')
+                    ->label('截止時間')
                     ->dateTime()
                     ->sortable()
                     ->color(fn ($record) => $record->due_date && $record->due_date->isPast() && !$record->is_completed ? 'danger' : 'gray'),
                 Tables\Columns\IconColumn::make('is_completed')
+                    ->label('已完成')
                     ->boolean()
                     ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
+                    ->label('分類')
                     ->relationship('category', 'name'),
                 Tables\Filters\SelectFilter::make('priority')
+                    ->label('優先級')
                     ->relationship('priority', 'name'),
                 Tables\Filters\SelectFilter::make('status')
+                    ->label('狀態')
                     ->relationship('status', 'name'),
                 Tables\Filters\SelectFilter::make('creator')
                     ->relationship('creator', 'name')
-                    ->label('Created By'),
+                    ->label('建立者'),
                 Tables\Filters\SelectFilter::make('assignee')
                     ->relationship('assignee', 'name')
-                    ->label('Assigned To'),
-                Tables\Filters\TernaryFilter::make('is_completed'),
+                    ->label('指派給'),
+                Tables\Filters\TernaryFilter::make('is_completed')
+                    ->label('已完成'),
                 Tables\Filters\Filter::make('overdue')
+                    ->label('已逾期')
                     ->query(fn (Builder $query): Builder => $query->where('due_date', '<', now())->where('is_completed', false)),
                 Tables\Filters\Filter::make('due_today')
+                    ->label('今天到期')
                     ->query(fn (Builder $query): Builder => $query->whereDate('due_date', today())->where('is_completed', false)),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make()->label('查看'),
+                Tables\Actions\EditAction::make()->label('編輯'),
+                Tables\Actions\DeleteAction::make()->label('刪除'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->label('批次刪除'),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
