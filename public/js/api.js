@@ -15,6 +15,11 @@ class TodoAPI {
         // Add request interceptor
         axios.interceptors.request.use(
             (config) => {
+                // Add Authorization header for all requests if token exists
+                if (this.token) {
+                    config.headers['Authorization'] = `Bearer ${this.token}`;
+                }
+                
                 // Add CSRF token for non-GET requests
                 if (config.method !== 'get') {
                     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');

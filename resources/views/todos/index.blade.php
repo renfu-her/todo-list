@@ -186,6 +186,15 @@ $(document).ready(function() {
     let currentPage = 1;
     let currentFilters = {};
 
+    // Check if user is authenticated
+    if (!api.token) {
+        console.log('No token found, redirecting to login');
+        window.location.href = '/login';
+        return;
+    }
+
+    console.log('Token found:', api.token ? 'Yes' : 'No');
+
     // Load initial data
     loadStats();
     loadFilters();
@@ -268,8 +277,11 @@ $(document).ready(function() {
         `);
 
         try {
+            console.log('Loading todos with token:', api.token ? 'Yes' : 'No');
             const params = { ...currentFilters, page: currentPage };
+            console.log('Request params:', params);
             const response = await api.getTodos(params);
+            console.log('API response:', response);
             
             if (response.success) {
                 const todos = response.data.data;
@@ -292,12 +304,14 @@ $(document).ready(function() {
                 }
             }
         } catch (error) {
+            console.error('Load todos error:', error);
             api.showError(error);
             container.html(`
                 <div class="text-center py-5">
                     <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
                     <h5 class="text-danger">載入失敗</h5>
                     <p class="text-muted">無法載入任務，請稍後再試</p>
+                    <p class="text-muted small">錯誤詳情: ${error.message || '未知錯誤'}</p>
                     <button class="btn btn-primary" onclick="location.reload()">
                         <i class="fas fa-redo me-1"></i>重新載入
                     </button>
@@ -373,22 +387,24 @@ $(document).ready(function() {
             const editBtn = item.querySelector('.edit-todo');
             const deleteBtn = item.querySelector('.delete-todo');
             
-            toggleBtn.data('todo-id', todo.id);
-            toggleBtn.data('completed', todo.is_completed ? '1' : '0');
+            // Set data attributes
+            toggleBtn.setAttribute('data-todo-id', todo.id);
+            toggleBtn.setAttribute('data-completed', todo.is_completed ? '1' : '0');
             
             if (todo.is_completed) {
                 item.querySelector('.card').classList.add('completed');
-                toggleBtn.find('i').removeClass('fa-check').addClass('fa-undo');
+                toggleBtn.querySelector('i').classList.remove('fa-check');
+                toggleBtn.querySelector('i').classList.add('fa-undo');
             }
             
             editBtn.href = `/todos/${todo.id}/edit`;
             
             // Add event listeners
-            toggleBtn.on('click', function() {
+            toggleBtn.addEventListener('click', function() {
                 toggleComplete(todo.id, this);
             });
             
-            deleteBtn.on('click', function() {
+            deleteBtn.addEventListener('click', function() {
                 deleteTodo(todo.id, item);
             });
             
