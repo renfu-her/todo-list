@@ -438,6 +438,16 @@ $(document).ready(function() {
             const dueDate = todo.due_date ? new Date(todo.due_date) : null;
             const currentDate = new Date();
             
+            // Debug: Log date comparison details
+            console.log('Todo overdue calculation for ID:', todo.id, {
+                due_date: todo.due_date,
+                dueDate_parsed: dueDate,
+                currentDate: currentDate,
+                isCompleted: isCompleted,
+                isTaskCompleted: isTaskCompleted,
+                dueDate_less_than_current: dueDate ? dueDate < currentDate : false
+            });
+            
             const isOverdue = dueDate && dueDate < currentDate && !isTaskCompleted;
             
             if (isOverdue) {
