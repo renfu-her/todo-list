@@ -18,8 +18,11 @@ class StatusResource extends Resource
     protected static ?string $model = Status::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-signal';
-
     protected static ?string $navigationGroup = 'Task Management';
+    protected static ?string $navigationLabel = '狀態管理';
+    protected static ?string $modelLabel = '狀態';
+    protected static ?string $pluralModelLabel = '狀態';
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {

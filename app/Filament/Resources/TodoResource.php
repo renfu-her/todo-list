@@ -12,14 +12,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
 
 class TodoResource extends Resource
 {
     protected static ?string $model = Todo::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
-
     protected static ?string $navigationGroup = 'Task Management';
+    protected static ?string $navigationLabel = '任務管理';
+    protected static ?string $modelLabel = '任務';
+    protected static ?string $pluralModelLabel = '任務';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -33,8 +37,15 @@ class TodoResource extends Resource
                         Forms\Components\Textarea::make('description')
                             ->maxLength(65535)
                             ->columnSpanFull(),
-                        Forms\Components\DateTimePicker::make('due_date')
-                            ->label('Due Date'),
+                        Flatpickr::make('due_date')
+                            ->label('Due Date')
+                            ->dateFormat('Y-m-d H:i')
+                            ->allowInput()
+                            ->altInput(true)
+                            ->altFormat('Y-m-d H:i')
+                            ->customConfig([
+                                'locale' => 'zh_tw',
+                            ]),
                     ])
                     ->columns(2),
                 

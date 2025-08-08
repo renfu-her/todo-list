@@ -18,8 +18,11 @@ class PriorityResource extends Resource
     protected static ?string $model = Priority::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
-
     protected static ?string $navigationGroup = 'Task Management';
+    protected static ?string $navigationLabel = '優先級管理';
+    protected static ?string $modelLabel = '優先級';
+    protected static ?string $pluralModelLabel = '優先級';
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

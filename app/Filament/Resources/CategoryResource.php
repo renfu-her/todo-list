@@ -18,8 +18,11 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
-
     protected static ?string $navigationGroup = 'Task Management';
+    protected static ?string $navigationLabel = '分類管理';
+    protected static ?string $modelLabel = '分類';
+    protected static ?string $pluralModelLabel = '分類';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

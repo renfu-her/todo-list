@@ -12,14 +12,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
-
     protected static ?string $navigationGroup = 'User Management';
+    protected static ?string $navigationLabel = '用戶管理';
+    protected static ?string $modelLabel = '用戶';
+    protected static ?string $pluralModelLabel = '用戶';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -39,8 +43,15 @@ class UserResource extends Resource
                             ->password()
                             ->dehydrated(fn ($state) => filled($state))
                             ->required(fn (string $context): bool => $context === 'create'),
-                        Forms\Components\DateTimePicker::make('email_verified_at')
-                            ->label('Email Verified At'),
+                        Flatpickr::make('email_verified_at')
+                            ->label('Email Verified At')
+                            ->dateFormat('Y-m-d H:i')
+                            ->allowInput()
+                            ->altInput(true)
+                            ->altFormat('Y-m-d H:i')
+                            ->customConfig([
+                                'locale' => 'zh_tw',
+                            ]),
                     ])
                     ->columns(2),
             ]);

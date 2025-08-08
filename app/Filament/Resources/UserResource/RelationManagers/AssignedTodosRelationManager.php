@@ -7,6 +7,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Coolsam\FilamentFlatpickr\Forms\Components\Flatpickr;
 
 class AssignedTodosRelationManager extends RelationManager
 {
@@ -24,7 +25,14 @@ class AssignedTodosRelationManager extends RelationManager
                 Forms\Components\Textarea::make('description')
                     ->maxLength(65535)
                     ->columnSpanFull(),
-                Forms\Components\DateTimePicker::make('due_date'),
+                Flatpickr::make('due_date')
+                    ->dateFormat('Y-m-d H:i')
+                    ->allowInput()
+                    ->altInput(true)
+                    ->altFormat('Y-m-d H:i')
+                    ->customConfig([
+                        'locale' => 'zh_tw',
+                    ]),
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
                     ->searchable()
