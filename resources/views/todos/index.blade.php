@@ -368,7 +368,19 @@ $(document).ready(function() {
                 statusExists: !!todo.status
             });
             
-            if (todo.status && todo.status.name) {
+            // Check if task is overdue
+            const isOverdue = todo.due_date && new Date(todo.due_date) < new Date() && 
+                             (!todo.status || todo.status.name !== 'Completed') && 
+                             (!todo.is_completed || todo.is_completed === false);
+            
+            if (isOverdue) {
+                // Show overdue status
+                badgesContainer.innerHTML += `
+                    <span class="badge status-badge" style="background-color: #EF4444">
+                        <i class="fas fa-exclamation-triangle me-1"></i>Overdue
+                    </span>
+                `;
+            } else if (todo.status && todo.status.name) {
                 badgesContainer.innerHTML += `
                     <span class="badge status-badge" style="background-color: ${todo.status.color}">
                         <i class="fas fa-signal me-1"></i>${todo.status.name}
