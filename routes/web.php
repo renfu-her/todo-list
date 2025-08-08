@@ -26,6 +26,10 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// API authentication routes for frontend
+Route::post('/api/auth/login', [AuthController::class, 'apiLogin'])->name('api.auth.login');
+Route::post('/api/auth/logout', [AuthController::class, 'apiLogout'])->middleware('auth:sanctum')->name('api.auth.logout');
+
 // Protected routes
 Route::middleware('auth')->group(function () {
     // Todo routes

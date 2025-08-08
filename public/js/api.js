@@ -47,7 +47,7 @@ class TodoAPI {
     // Auth methods
     async login(email, password) {
         try {
-            const response = await axios.post(`${this.baseURL}/auth/login`, {
+            const response = await axios.post('/api/auth/login', {
                 email,
                 password
             });
@@ -56,6 +56,8 @@ class TodoAPI {
                 this.token = response.data.data.token;
                 localStorage.setItem('auth_token', this.token);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+                // Reload the page to update the UI
+                window.location.reload();
             }
             
             return response.data;
@@ -87,7 +89,7 @@ class TodoAPI {
 
     async logout() {
         try {
-            await axios.post(`${this.baseURL}/auth/logout`);
+            await axios.post('/api/auth/logout');
             this.token = null;
             localStorage.removeItem('auth_token');
             delete axios.defaults.headers.common['Authorization'];

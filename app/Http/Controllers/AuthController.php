@@ -91,4 +91,67 @@ class AuthController extends Controller
 
         return redirect('/');
     }
+
+    /**
+     * Handle API login with session authentication.
+     */
+    public function apiLogin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid credentials',
+            ], 401);
+        }
+
+        $user = User::where('email', $request->email)->firstOrFail();
+        
+        // Create token for API authentication
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Regenerate session for security
+        $request->session()->regenerate();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Login successful',
+            'data' => [
+                'user' => $user,
+                'token' => $token,
+                'token_type' => 'Bearer',
+            ]
+        ]);
+    }
+
+    /**
+     * Handle API logout with session authentication.
+     */
+    public function apiLogout(Request $request)
+    {
+        // Revoke the current token
+        $request->user()->currentAccessToken()->delete();
+
+        // Also logout from session
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully logged out',
+        ]);
+    }
 }

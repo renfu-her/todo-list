@@ -40,9 +40,6 @@ class AuthController extends Controller
         // Create token for API authentication
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // Also log in the user for session authentication
-        Auth::login($user);
-
         return response()->json([
             'success' => true,
             'message' => 'User registered successfully',
@@ -84,9 +81,6 @@ class AuthController extends Controller
         // Create token for API authentication
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // Regenerate session for security
-        $request->session()->regenerate();
-
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
@@ -118,11 +112,6 @@ class AuthController extends Controller
     {
         // Revoke the current token
         $request->user()->currentAccessToken()->delete();
-
-        // Also logout from session
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
 
         return response()->json([
             'success' => true,
