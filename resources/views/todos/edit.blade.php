@@ -286,7 +286,22 @@ $(document).ready(function() {
                 // Populate form fields
                 $('#title').val(todo.title);
                 $('#description').val(todo.description);
-                $('#due_date').val(todo.due_date ? new Date(todo.due_date).toISOString().slice(0, 16) : '');
+                
+                // Handle due_date timezone conversion
+                if (todo.due_date) {
+                    // Parse the local time string and format for datetime-local input
+                    const dueDate = new Date(todo.due_date);
+                    const year = dueDate.getFullYear();
+                    const month = String(dueDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(dueDate.getDate()).padStart(2, '0');
+                    const hours = String(dueDate.getHours()).padStart(2, '0');
+                    const minutes = String(dueDate.getMinutes()).padStart(2, '0');
+                    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                    $('#due_date').val(formattedDateTime);
+                } else {
+                    $('#due_date').val('');
+                }
+                
                 $('#is_completed').prop('checked', todo.is_completed);
                 
                 // Set select values (will be populated after form data loads)
