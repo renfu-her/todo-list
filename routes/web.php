@@ -37,4 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/todos/{todo}', [TodoController::class, 'update'])->name('todos.update');
     Route::delete('/todos/{todo}', [TodoController::class, 'destroy'])->name('todos.destroy');
     Route::patch('/todos/{todo}/toggle', [TodoController::class, 'toggleComplete'])->name('todos.toggle');
+    
+    // Comment routes
+    Route::post('/todos/{todo}/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('todos.comments.store');
+    Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
 });
