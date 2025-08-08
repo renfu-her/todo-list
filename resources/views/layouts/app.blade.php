@@ -48,7 +48,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('todos.index') }}">
+            <a class="navbar-brand" href="{{ route('home') }}">
                 <i class="fas fa-tasks me-2"></i>ToDo List
             </a>
             
@@ -58,15 +58,20 @@
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('home') }}">
+                            <i class="fas fa-home me-1"></i>首頁
+                        </a>
+                    </li>
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('todos.index') }}">
-                                <i class="fas fa-list me-1"></i>My Tasks
+                                <i class="fas fa-list me-1"></i>我的任務
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('todos.create') }}">
-                                <i class="fas fa-plus me-1"></i>New Task
+                                <i class="fas fa-plus me-1"></i>新增任務
                             </a>
                         </li>
                     @endauth
@@ -76,12 +81,12 @@
                     @guest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                                <i class="fas fa-sign-in-alt me-1"></i>登入
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('register') }}">
-                                <i class="fas fa-user-plus me-1"></i>Register
+                                <i class="fas fa-user-plus me-1"></i>註冊
                             </a>
                         </li>
                     @else
@@ -94,7 +99,7 @@
                                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
                                         @csrf
                                         <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                                            <i class="fas fa-sign-out-alt me-1"></i>登出
                                         </button>
                                     </form>
                                 </li>
@@ -140,11 +145,100 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light py-4 mt-5">
-        <div class="container text-center">
-            <p class="text-muted mb-0">
-                <i class="fas fa-code me-1"></i>Built with Laravel 12 & Bootstrap 5
-            </p>
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-tasks me-2"></i>ToDo List
+                    </h5>
+                    <p class="text-muted">
+                        高效管理您的任務，提升生產力。
+                        專為個人和團隊設計的智能任務管理應用程式。
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="text-muted me-3">
+                            <i class="fab fa-facebook fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted me-3">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted me-3">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-muted">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">功能特色</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2"></i>智能任務分類
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2"></i>團隊協作管理
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2"></i>進度追蹤統計
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2"></i>響應式設計
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">快速連結</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2">
+                            <a href="{{ route('home') }}" class="text-muted text-decoration-none">
+                                <i class="fas fa-home me-2"></i>首頁
+                            </a>
+                        </li>
+                        @guest
+                            <li class="mb-2">
+                                <a href="{{ route('login') }}" class="text-muted text-decoration-none">
+                                    <i class="fas fa-sign-in-alt me-2"></i>登入
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{ route('register') }}" class="text-muted text-decoration-none">
+                                    <i class="fas fa-user-plus me-2"></i>註冊
+                                </a>
+                            </li>
+                        @else
+                            <li class="mb-2">
+                                <a href="{{ route('todos.index') }}" class="text-muted text-decoration-none">
+                                    <i class="fas fa-list me-2"></i>我的任務
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{{ route('todos.create') }}" class="text-muted text-decoration-none">
+                                    <i class="fas fa-plus me-2"></i>新增任務
+                                </a>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-code me-1"></i>Built with Laravel 12 & Bootstrap 5
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">
+                        &copy; {{ date('Y') }} ToDo List. All rights reserved.
+                    </p>
+                </div>
+            </div>
         </div>
     </footer>
 
